@@ -14,16 +14,16 @@ public class Cell : CellBase
     //this method is looking for neighbours that are not visited yet
     public bool hasUnvisitedNeighbours(Grid grid)
     {
-        if (grid.cells[x + 1][y].visited == false)
+        if (grid.cells[x + 1,y].visited == false)
         {
             return true;
-        }else if (grid.cells[x - 1][y].visited == false)
+        }else if (grid.cells[x - 1,y].visited == false)
         {
             return true;
-        }else if (grid.cells[x][y + 1].visited != false)
+        }else if (grid.cells[x,y + 1].visited != false)
         {
             return true;
-        }else if (grid.cells[x][y - 1].visited != false)
+        }else if (grid.cells[x,y - 1].visited != false)
         {
             return true;
         }
