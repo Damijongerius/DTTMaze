@@ -7,7 +7,7 @@
 */
 public class CellBase
 {
-    //here i put the variables i use in Cell
+    //here are the variable used in the cell
     public Walls walls = new Walls();
     public bool visited;
     public int x;
