@@ -11,6 +11,10 @@ using UnityEngine;
 */
 public class MazeGenerator : MonoBehaviour
 {
+    //update delegate for running generatePath
+    public delegate void Updating();
+    public Updating updating;
+
     public Material floor;
     public GameObject empty;
 
@@ -20,7 +24,10 @@ public class MazeGenerator : MonoBehaviour
     //these are the start positions
     public int startX;
     public int startY;
-    
+
+    private int a;
+
+    private static bool startDrawing = false;
 
     //here is the grid class containing everything about the maze
     private static Grid grid;
@@ -29,18 +36,35 @@ public class MazeGenerator : MonoBehaviour
         grid = new Grid(width,height);
         grid.init();
         generatePath();
-        generateTerrain();
+
+    }
+
+    private void Update()
+    {
+        updating();
+        a++;
+        if (a == 1000)
+        {
+            generateTerrain();
+            startDrawing = false;
+        }   
     }
 
     public void generatePath()
     {
-
+        GeneratePath generatePath = new GeneratePath(startX,startY,grid);
+        updating += generatePath.startGenerator;
     }
     //this will make the maze visible by making a mesh out of it
     public void generateTerrain()
     {
         DrawMaze drawMaze = new DrawMaze(grid,floor, empty);
         drawMaze.DrawTerrain();
+    }
+
+    public static void FinishedGenerating()
+    {
+        startDrawing = true;
     }
 
 }

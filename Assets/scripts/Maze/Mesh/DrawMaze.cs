@@ -56,7 +56,7 @@ public class DrawMaze
                         //for 5 faces
                         for (int k = 0; k < 5; k++)
                         {
-                            if (cell.walls[k] == false)
+                            if (cell.walls[k] == true)
                             {
                                 Vector3[] v = quads.Face(k);
                                 //for 2 triangle corners

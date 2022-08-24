@@ -13,7 +13,7 @@ public class Grid
     //i chose to make more stacks so i can make it more like a tree
     //in these stacks im going to save the last done moves
     public List<int[,]> stacks = new List<int[,]>();
-    public int checkmarks = new int();
+    public int checkmarks = 1;
     public Grid(int _width, int _height) 
     {
         this.width = _width;
@@ -32,5 +32,14 @@ public class Grid
                 this.cells[x, y] = cell;
             }
         }
+    }
+
+    public bool allVisited()
+    {
+        if(checkmarks == width * height)
+        {
+            return true;
+        }
+        return false;
     }
 }

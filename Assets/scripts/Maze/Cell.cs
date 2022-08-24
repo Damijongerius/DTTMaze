@@ -12,25 +12,49 @@ public class Cell : CellBase
         this.x = x;
     }
     //this method is looking for neighbours that are not visited yet
-    public List<int[,]> hasUnvisitedNeighbours(Grid grid)
+    public List<Vector2> hasUnvisitedNeighbours(Grid grid)
     {
-        List<int[,]> neighbours = new List<int[,]>();
-        if (grid.cells[x + 1,y].visited == false)
+        List<Vector2> neighbours = new List<Vector2>();
+        try
         {
-           neighbours.Add(new int [x + 1, y]);
-        }else if (grid.cells[x - 1,y].visited == false)
-        {
-            neighbours.Add(new int[x - 1, y]);
+            if(grid.cells.GetLength(0) > x)
+            {
+                Debug.Log("possible 1");
+                if (grid.cells[x + 1, y].visited == false)
+                {
+                    neighbours.Add(new Vector2(x + 1, y));
+                }
+            }
+            if (grid.cells.GetLength(1) > y)
+            {
+                Debug.Log("possible 1");
+                if (grid.cells[x, y + 1].visited != false)
+                {
+                    neighbours.Add(new Vector2(x, y + 1));
+                }
+            }
+            if(x > 0)
+            {
+                Debug.Log("possible 1");
+                if (grid.cells[x - 1, y].visited == false)
+                {
+                    neighbours.Add(new Vector2(x - 1, y));
+                }
+            }
+            if(y > 0)
+            {
+                Debug.Log("possible 1");
+                if (grid.cells[x, y - 1].visited != false)
+                {
+                    neighbours.Add(new Vector2(x, y - 1));
+                }
+            }
         }
-        else if (grid.cells[x,y + 1].visited != false)
+        catch
         {
-            neighbours.Add(new int[x, y + 1]);
+            return null;
         }
-        else if (grid.cells[x,y - 1].visited != false)
-        {
-            neighbours.Add(new int[x, y - 1]);
-        }
-     return neighbours;
+        return neighbours;
     }
 }
 

@@ -11,6 +11,6 @@ public class CellBase
     public bool visited;
     public int x;
     public int y;
-    public bool[] walls = new bool[] { false, false, false, false, false};
-    
+    public bool[] walls = new bool[] { true, true, true, true, true };
+                                   // floor, north, south, east, west; 
 }
