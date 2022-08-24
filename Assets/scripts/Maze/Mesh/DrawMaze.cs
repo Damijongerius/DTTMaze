@@ -5,7 +5,7 @@ using UnityEngine;
 //in this script the maze wil get drawn
 public class DrawMaze
 {
-    //defining all needs for creating mesh
+    //defining all needs for creating meshes
     private int width;
     private int height;
 
@@ -17,13 +17,15 @@ public class DrawMaze
     //constructor
     public DrawMaze(Grid _grid, Material _mat, GameObject _gameObject)
     {
-        this.width = _grid.height;
+        this.width = _grid.width;
         this.height = _grid.height;
 
         this.empty = _gameObject;
 
         this.grid = _grid;
         this.mat = _mat;
+
+        Debug.Log("constructor2 " + width + "\\" + height);
     }
 
     //create all the triangles,verts and uv's
@@ -46,7 +48,6 @@ public class DrawMaze
                 {
                     for (int y = 0; y < CalculateLeftOver(height, j); y++)
                     {
-                        Debug.Log(i + "-" + j);
                         Cell cell = grid.cells[x, y];
 
                         quads quads = new quads(x, y);
@@ -55,13 +56,16 @@ public class DrawMaze
                         //for 5 faces
                         for (int k = 0; k < 5; k++)
                         {
-                            Vector3[] v = quads.Face(k);
-                            //for 2 triangle corners
-                            for (int l = 0; l < 6; l++)
+                            if (cell.walls[k] == false)
                             {
-                                vertices.Add(v[l]);
-                                triangles.Add(triangles.Count);
-                                uvs.Add(uv[l]);
+                                Vector3[] v = quads.Face(k);
+                                //for 2 triangle corners
+                                for (int l = 0; l < 6; l++)
+                                {
+                                    vertices.Add(v[l]);
+                                    triangles.Add(triangles.Count);
+                                    uvs.Add(uv[l]);
+                                }
                             }
                         }
                     }
@@ -82,22 +86,23 @@ public class DrawMaze
         }
     }
 
+    //this method will simply calculate howmanytimes a new mesh will be created
     private int CalculateAmount(int _wH)
     {
-        int answer = Mathf.CeilToInt(_wH / 10);
+        int answer = (int)Mathf.Ceil((float)_wH / 10);
         Debug.Log(answer);
         return answer;
     }
 
+    //this method will calculate how many cells are going to be needed in one axis of a mesh
     private int CalculateLeftOver(int _wh, int _ij)
     {
         
         if ( _wh - (_ij * 10) < 10)
         {
-            Debug.Log("widthheightcells" + _wh % 10);
+            Debug.Log(_wh % 10);
             return _wh % 10;
         }
-        Debug.Log("widthheightcells" + 10);
         return 10;
     }
 
@@ -109,6 +114,7 @@ public class DrawMaze
         Vector2 uv10 = new Vector2(1f, 0);
         Vector2 uv01 = new Vector2(1f, 1f);
         Vector2 uv11 = new Vector2(0, 1f);
+
         //pos for triangles
         Vector2[] uv = new Vector2[] { uv00, uv10, uv01, uv10, uv11, uv01 };
         return uv;

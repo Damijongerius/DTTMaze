@@ -168,9 +168,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floor: {fileID: 2100000, guid: e5213f93a896bf0479c8f66e21f1b5f6, type: 2}
+  empty: {fileID: 4163026018418136025, guid: f22e376dd8bbe29479ceca5e9836d4b8, type: 3}
   width: 200
   height: 200
-  empty: {fileID: 4163026018418136025, guid: f22e376dd8bbe29479ceca5e9836d4b8, type: 3}
+  startX: 0
+  startY: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

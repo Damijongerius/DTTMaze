@@ -12,9 +12,15 @@ using UnityEngine;
 public class MazeGenerator : MonoBehaviour
 {
     public Material floor;
+    public GameObject empty;
+
     public int width;
     public int height;
-    public GameObject empty;
+
+    //these are the start positions
+    public int startX;
+    public int startY;
+    
 
     //here is the grid class containing everything about the maze
     private static Grid grid;
@@ -22,6 +28,7 @@ public class MazeGenerator : MonoBehaviour
     {
         grid = new Grid(width,height);
         grid.init();
+        generatePath();
         generateTerrain();
     }
 
@@ -35,4 +42,5 @@ public class MazeGenerator : MonoBehaviour
         DrawMaze drawMaze = new DrawMaze(grid,floor, empty);
         drawMaze.DrawTerrain();
     }
+
 }

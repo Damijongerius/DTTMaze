@@ -8,15 +8,9 @@
 public class CellBase
 {
     //here are the variable used in the cell
-    public Walls walls = new Walls();
     public bool visited;
     public int x;
     public int y;
-    public class Walls
-    {
-        public bool wallN;
-        public bool wallE;
-        public bool wallS;
-        public bool wallW;
-    }
+    public bool[] walls = new bool[] { false, false, false, false, false};
+    
 }

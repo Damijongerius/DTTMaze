@@ -12,22 +12,25 @@ public class Cell : CellBase
         this.x = x;
     }
     //this method is looking for neighbours that are not visited yet
-    public bool hasUnvisitedNeighbours(Grid grid)
+    public List<int[,]> hasUnvisitedNeighbours(Grid grid)
     {
+        List<int[,]> neighbours = new List<int[,]>();
         if (grid.cells[x + 1,y].visited == false)
         {
-            return true;
+           neighbours.Add(new int [x + 1, y]);
         }else if (grid.cells[x - 1,y].visited == false)
         {
-            return true;
-        }else if (grid.cells[x,y + 1].visited != false)
-        {
-            return true;
-        }else if (grid.cells[x,y - 1].visited != false)
-        {
-            return true;
+            neighbours.Add(new int[x - 1, y]);
         }
-     return false;
+        else if (grid.cells[x,y + 1].visited != false)
+        {
+            neighbours.Add(new int[x, y + 1]);
+        }
+        else if (grid.cells[x,y - 1].visited != false)
+        {
+            neighbours.Add(new int[x, y - 1]);
+        }
+     return neighbours;
     }
 }
 

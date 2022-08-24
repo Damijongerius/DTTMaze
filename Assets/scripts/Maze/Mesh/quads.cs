@@ -11,6 +11,7 @@ public class quads
     {
         this.x = x;
         this.y = y;
+
     }
     public Vector3[] Face(int face)
     {
@@ -30,18 +31,19 @@ public class quads
         Vector3[] east  = new Vector3[] { c, b, a, c, a, d };
         Vector3[] south = new Vector3[] { h, e, b, h, b, c };
         Vector3[] west  = new Vector3[] { g, f, e, h, g, e };
-        
+
+
         //return for the loop im running in DrawMaze
         switch (face)
         {
             case 0:
-                return floor;
+                return floor; 
             case 1:
                 return north;
             case 2:
-                return south;
-            case 3:
                 return east;
+            case 3:
+                return south;
             case 4:
                 return west;
             default:
