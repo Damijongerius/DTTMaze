@@ -15,44 +15,36 @@ public class Cell : CellBase
     public List<Vector2> hasUnvisitedNeighbours(Grid grid)
     {
         List<Vector2> neighbours = new List<Vector2>();
-        try
+
+        if (grid.width >= x)
         {
-            if(grid.cells.GetLength(0) > x)
+            if (grid.cells[(x + 1), y].visited == false)
             {
-                Debug.Log("possible 1");
-                if (grid.cells[x + 1, y].visited == false)
-                {
-                    neighbours.Add(new Vector2(x + 1, y));
-                }
-            }
-            if (grid.cells.GetLength(1) > y)
-            {
-                Debug.Log("possible 1");
-                if (grid.cells[x, y + 1].visited != false)
-                {
-                    neighbours.Add(new Vector2(x, y + 1));
-                }
-            }
-            if(x > 0)
-            {
-                Debug.Log("possible 1");
-                if (grid.cells[x - 1, y].visited == false)
-                {
-                    neighbours.Add(new Vector2(x - 1, y));
-                }
-            }
-            if(y > 0)
-            {
-                Debug.Log("possible 1");
-                if (grid.cells[x, y - 1].visited != false)
-                {
-                    neighbours.Add(new Vector2(x, y - 1));
-                }
+                neighbours.Add(new Vector2(x + 1, y));
             }
         }
-        catch
+        if (grid.height >= y)
         {
-            return null;
+            if (grid.cells[x, (y + 1)].visited == false)
+            {
+                neighbours.Add(new Vector2(x, y + 1));
+            }
+        }
+
+        if (x > 0)
+        {
+            if (grid.cells[(x - 1), y].visited == false)
+            {
+                neighbours.Add(new Vector2(x - 1, y));
+            }
+        }
+
+        if (y > 0)
+        {
+            if (grid.cells[x, (y - 1)].visited == false)
+            {
+                neighbours.Add(new Vector2(x, y - 1));
+            }
         }
         return neighbours;
     }

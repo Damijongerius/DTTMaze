@@ -26,6 +26,11 @@ public class Path
 
     public bool delete = false;
 
+    //stack list location
+    private int index;
+
+    private int chance;
+
     //constructor
     public Path(GeneratePath _generator, int x, int y, List<Vector2> _stack)
     {
@@ -47,52 +52,52 @@ public class Path
     //the movement of the script
     public Path Walk()
     {
-         Debug.Log("walk");
         // getting the grid so i can get the cells
         Grid grid = generator.getGrid();
         Cell cell;
 
+
         //asking for the unvisited neighbours
-        List<Vector2> neighbours = grid.cells[x, y].hasUnvisitedNeighbours(grid);
-        Debug.Log("unvisitedneighbours:" + neighbours.Count);
-            
+        List<Vector2> neighbours;
+        try
+        {
+            neighbours = grid.cells[x, y].hasUnvisitedNeighbours(grid);
+        }
+        catch
+        {
+            neighbours = new List<Vector2>();
+        }
+
+
         //testing if their are unvisited neighbours in the list
         //and if it issnt null it will randomly choose a neighbour
-        if (neighbours != null || neighbours.Count != 0)
+        Debug.Log(neighbours.Count);
+        if (neighbours.Count != 0)
         {
-            for (int i = 0; i < neighbours.Count; i++)
+            int random = Random.Range(0, neighbours.Count);
+
+            cell = grid.cells[(int)neighbours[random].x, (int)neighbours[random].y];
+            walking(cell);
+
+            //if there is another neighbour in the list there will be a chance it will mutate and make another path
+            chance++;
+            Debug.Log(chance);
+            if(Random.Range(chance, 10) == 10)
             {
-                if (Random.Range(0, 1) <= 0.6)
+                chance = 0;
+                int second = Random.Range(0, neighbours.Count);
+                if (grid.cells[(int)neighbours[second].x, (int)neighbours[second].y] != cell)
                 {
-                    Debug.Log("chose a new pos");
-                    cell = grid.cells[(int)neighbours[i].x, (int)neighbours[i].y];
-                    walking(cell);
-
-                    //if there is another neighbour in the list there will be a chance it will mutate and make another path
-                    if (neighbours.Count > i)
-                    {
-                        if (Random.Range(0, 1) <= 0.5)
-                        {
-                            Debug.Log("mutating path");
-                            Path path = new Path(generator, cell.x, cell.y, stack);
-                            return path;
-                        }
-                    }
-                    break;
+                    //Debug.Log("mutating path");
+                    Path path = new Path(generator, cell.x, cell.y, stack);
+                    return path;
                 }
-
-                //if there are not more neighbours and the code hassnt chosen yet it wil automatically do the last on in the list
-                if (i == neighbours.Count)
-                {
-                    cell = grid.cells[(int)neighbours[i].x, (int)neighbours[i].y];
-                    walking(cell);
-                }
-            }
+            }  
         }
         else
         {
             //if there are not possibilities here it will go back and try to do it again
-            Debug.Log("no possible neighbour");
+            //Debug.Log("no possible neighbour");
             if (walkBack())
             {
                 return this;
@@ -102,40 +107,52 @@ public class Path
                 Walk();
             }
         }
-        
 
-        return null;
 
         void walking(Cell cell)
         {
-            Debug.Log("walking");
             //first making sure visited it true
             //adding the last pos to stack
             //and removing the walls
             grid.cells[x, y].visited = true;
             stack.Add(new Vector2(x, y));
+
             removeWall(cell);
+            Debug.Log("walking from:" + x + "," + y + " to:" + cell.x + "," +  cell.y);
 
             //setting the new positions 
             //and adding a checkmark so the code later will see ooh everything send back a mark so i can stop generating
             this.x = cell.x;
             this.y = cell.y;
+            
             cell.visited = true;
             grid.checkmarks++;
+
+            if (index == 0)
+            {
+                grid.stacks.Add(stack);
+                index = grid.stacks.Count;
+            }
+            else
+            {
+                grid.stacks[index] = stack;
+            }
         }
 
         //letting the class go back to an older pos
         bool walkBack()
         {
-            Debug.Log("walkback");
             int length = stack.Count - 1;
 
             //if its at its start it will delete itself
             //otherwise it will just return and run again
             if(stack[length] != start)
             {
+                Debug.Log("walkingback from:" + x + "," + y + " to:" + (int)stack[length].x + "," + (int)stack[length].y);
                 this.x = (int)stack[length].x;
                 this.y = (int)stack[length].y;
+                stack.RemoveAt(length);
+
                 return false;
             }
             else
@@ -160,14 +177,14 @@ public class Path
                 {
                     case -1:
                         {
-                            grid.cells[x, y].walls[2] = false;
-                            cell.walls[1] = false;
+                            grid.cells[x, y].walls[1] = false;
+                            cell.walls[2] = false;
                             break;
                         }
                     case 1:
                         {
-                            grid.cells[x, y].walls[1] = false;
-                            cell.walls[2] = false;
+                            grid.cells[x, y].walls[2] = false;
+                            cell.walls[1] = false;
                             break;
                         }
                     default:
@@ -183,18 +200,19 @@ public class Path
                 {
                     case -1:
                         {
-                            grid.cells[x, y].walls[4] = false;
-                            cell.walls[3] = false;
+                            grid.cells[x, y].walls[3] = false;
+                            cell.walls[4] = false;
                             break;
                         }
                     case 1:
                         {
-                            grid.cells[x, y].walls[3] = false;
-                            cell.walls[4] = false;
+                            grid.cells[x, y].walls[4] = false;
+                            cell.walls[3] = false;
                             break;
                         }
                 }
             }
         }
+        return null;
     }
 }

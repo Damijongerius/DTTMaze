@@ -29,8 +29,12 @@ public class MazeGenerator : MonoBehaviour
 
     private static bool startDrawing = false;
 
+    public List<List<Vector2>> vector2s = new List<List<Vector2>>();
+
     //here is the grid class containing everything about the maze
-    private static Grid grid;
+    private Grid grid;
+
+    DrawMaze drawMaze;
     void Start()
     {
         grid = new Grid(width,height);
@@ -41,12 +45,17 @@ public class MazeGenerator : MonoBehaviour
 
     private void Update()
     {
-        updating();
+        if(updating != null)
+        {
+            updating();
+        }
         a++;
-        if (a == 1000)
+        if (a % 1000 * width * height == 0)
         {
             generateTerrain();
             startDrawing = false;
+
+            vector2s = grid.stacks;
         }   
     }
 
@@ -58,7 +67,15 @@ public class MazeGenerator : MonoBehaviour
     //this will make the maze visible by making a mesh out of it
     public void generateTerrain()
     {
-        DrawMaze drawMaze = new DrawMaze(grid,floor, empty);
+        if(drawMaze != null)
+        {
+            List<GameObject> destroy = drawMaze.getMeshes();
+            foreach(GameObject go in destroy)
+            {
+                Destroy(go);
+            }
+        }
+        drawMaze = new DrawMaze(grid,floor, empty);
         drawMaze.DrawTerrain();
     }
 
@@ -66,5 +83,6 @@ public class MazeGenerator : MonoBehaviour
     {
         startDrawing = true;
     }
+
 
 }

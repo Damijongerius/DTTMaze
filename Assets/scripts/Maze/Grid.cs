@@ -12,7 +12,7 @@ public class Grid
 
     //i chose to make more stacks so i can make it more like a tree
     //in these stacks im going to save the last done moves
-    public List<int[,]> stacks = new List<int[,]>();
+    public List<List<Vector2>> stacks = new List<List<Vector2>>();
     public int checkmarks = 1;
     public Grid(int _width, int _height) 
     {

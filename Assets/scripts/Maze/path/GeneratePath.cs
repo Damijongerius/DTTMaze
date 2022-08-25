@@ -11,7 +11,9 @@ public class GeneratePath
 
     private Grid grid;
 
-    List<Path> pathList = new List<Path>();
+    private List<Path> pathList = new List<Path>();
+
+    private int a;
 
     //constructor
     public GeneratePath(int _x, int _y, Grid _grid)
@@ -29,21 +31,28 @@ public class GeneratePath
     {
         if (grid.checkmarks < grid.width * grid.height)
         {
-            Debug.Log(grid.checkmarks + "| | | |" + grid.width * grid.height);
+            //Debug.Log(grid.checkmarks + "| | | |" + grid.width * grid.height);
             try
             {
-                foreach (Path p in pathList)
+                a++;
+                if(a % 1 == 0)
                 {
-                    Path newPath = p.Walk();
-                    if (newPath != null)
+                    foreach (Path p in pathList)
                     {
-                        if (newPath.delete)
+
+                        Path newPath = p.Walk();
+                        if (newPath != null)
                         {
-                            pathList.Remove(newPath);
-                        }
-                        else
-                        {
-                            pathList.Add((Path)newPath);
+                            if (newPath.delete)
+                            {
+                                Debug.Log("removing path amount:" + pathList.Count);
+                                pathList.Remove(newPath);
+                            }
+                            else
+                            {
+                                Debug.Log("adding path amount:" + pathList.Count);
+                                pathList.Add((Path)newPath);
+                            }
                         }
                     }
                 }

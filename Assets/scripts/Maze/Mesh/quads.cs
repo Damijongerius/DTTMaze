@@ -41,12 +41,13 @@ public class quads
             case 1:
                 return north;
             case 2:
-                return east;
-            case 3:
                 return south;
+            case 3:
+                return east;
             case 4:
                 return west;
             default:
+                Debug.Log("fail");
                 return null;
         }
     }

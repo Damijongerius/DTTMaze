@@ -14,6 +14,8 @@ public class DrawMaze
     private Material mat;
     private GameObject empty;
 
+    private List<GameObject> objects = new List<GameObject> ();
+
     //constructor
     public DrawMaze(Grid _grid, Material _mat, GameObject _gameObject)
     {
@@ -24,8 +26,6 @@ public class DrawMaze
 
         this.grid = _grid;
         this.mat = _mat;
-
-        Debug.Log("constructor2 " + width + "\\" + height);
     }
 
     //create all the triangles,verts and uv's
@@ -37,18 +37,19 @@ public class DrawMaze
             {
                 
                 GameObject obj = MazeGenerator.Instantiate(empty, new Vector3(i * 10, 0, j * 10), new Quaternion(0, 0, 0, 0));
+                objects.Add(obj);
 
                 Mesh mesh = new Mesh();
                 List<Vector3> vertices = new List<Vector3>();
                 List<int> triangles = new List<int>();
                 List<Vector2> uvs = new List<Vector2>();
 
-                //for every grid position it will make a cube without a roof thats inverted
-                for (int x = 0; x < CalculateLeftOver(width, i); x++)
+                //for every grid position it will make a cube without a roof that has inverted faces
+                for (int x = 0; x + (i * 10) < CalculateLeftOver(width, i) + (i * 10); x++)
                 {
-                    for (int y = 0; y < CalculateLeftOver(height, j); y++)
+                    for (int y = 0; y + (j * 10) < CalculateLeftOver(height, j) + (j * 10); y++)
                     {
-                        Cell cell = grid.cells[x, y];
+                        Cell cell = grid.cells[x + (i * 10), y + (j * 10)];
 
                         quads quads = new quads(x, y);
                         Vector2[] uv = getUvs(cell);
@@ -90,7 +91,6 @@ public class DrawMaze
     private int CalculateAmount(int _wH)
     {
         int answer = (int)Mathf.Ceil((float)_wH / 10);
-        Debug.Log(answer);
         return answer;
     }
 
@@ -100,7 +100,6 @@ public class DrawMaze
         
         if ( _wh - (_ij * 10) < 10)
         {
-            Debug.Log(_wh % 10);
             return _wh % 10;
         }
         return 10;
@@ -126,5 +125,10 @@ public class DrawMaze
         //puting the material on all the verts
         MeshRenderer meshRenderer = obj.GetComponent<MeshRenderer>();
         meshRenderer.material = mat;
+    }
+
+    public List<GameObject> getMeshes()
+    {
+        return objects;
     }
 }
