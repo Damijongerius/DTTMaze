@@ -7,6 +7,11 @@
 */
 public class CellBase
 {
+
+    //bool for if its the end or the start
+    public bool start;
+    public bool end;
+    
     //here are the variable used in the cell
     public bool visited;
     public int x;

@@ -63,21 +63,11 @@ public class GeneratePath
         }
         else
         {
-            Debug.Log("done");
             MazeGenerator mg = MazeGenerator.getInstance();
             mg.updating = null;
             mg.updating += mg.generateTerrain;
 
             mg.startDrawing = true;
-
-            foreach(List<Vector2> stack in grid.stacks)
-            {
-                Debug.Log("|||||||||||||||||||||||||||||||");
-                foreach(Vector2 v in stack)
-                {
-                    Debug.Log(v);
-                }
-            }
         }
     }
 

@@ -13,14 +13,14 @@ public class Grid
     //i chose to make more stacks so i can make it more like a tree
     //in these stacks im going to save the last done moves
     public List<List<Vector2>> stacks = new List<List<Vector2>>();
-    public int checkmarks = 2;
+    public int checkmarks = 1;
     public Grid(int _width, int _height) 
     {
         this.width = _width;
         this.height = _height;
     }
 
-    public void init()
+    public void init(Vector2 start, Vector2 end)
     {
         this.cells = new Cell[width, height];
 
@@ -29,6 +29,24 @@ public class Grid
             for (int y = 0; y < height; y++)
             {
                 Cell cell = new Cell(x, y);
+                
+                //testing if its the start or end pos
+                if(x == start.x)
+                {
+                    if(y == start.y)
+                    {
+                        cell.start = true;
+                    }
+                }
+
+                if (x == end.x)
+                {
+                    if (y == end.y)
+                    {
+                        cell.end = true;
+                    }
+                }
+
                 this.cells[x, y] = cell;
             }
         }

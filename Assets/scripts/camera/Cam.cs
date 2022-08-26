@@ -4,19 +4,23 @@ using UnityEngine;
 
 public class Cam : MonoBehaviour
 {
+    //speeds
     public float speed;
     public float boost;
 
+    //the actual input speed
     private float totalSpeed;
 
+    //the visual camera
     private Camera cam;
     private void Awake()
     {
+        //getting the component in the child
         cam = gameObject.GetComponentInChildren<Camera>();
     }
     void Update()
     {
-
+        //shift for speed up
         if (Input.GetKey(KeyCode.LeftShift))
         {
             totalSpeed = boost + speed;
@@ -25,8 +29,10 @@ public class Cam : MonoBehaviour
         {
             totalSpeed = speed;
         }
+        //moving the camera
         Move();
 
+        //rotation
             if (Input.GetKey(KeyCode.E))
         {
             transform.Rotate(0, 0.1f, 0, Space.Self);
@@ -39,11 +45,14 @@ public class Cam : MonoBehaviour
         Zoom();
     }
 
+    //the movement method
     public void Move()
     {
+        //getting the input from 2 axis to see if its minus or plus
         float xInput = Input.GetAxis("Horizontal");
         float zInput = Input.GetAxis("Vertical");
 
+        //calculating the direction 
         Vector3 dir = transform.forward * zInput + transform.right * xInput;
         dir = new Vector3(dir.x, 0, dir.z);
 
@@ -51,8 +60,10 @@ public class Cam : MonoBehaviour
 
     }
 
+    //the rotation method
     public void Zoom()
     {
+        //rotating with scroll wheel
         float scrollInput = Input.GetAxis("Mouse ScrollWheel");
         float dist = Vector3.Distance(transform.position, cam.transform.position);
 

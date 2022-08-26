@@ -20,9 +20,9 @@ public class MazeGenerator : MonoBehaviour
     public Material floor;
     public GameObject empty;
 
-    //these are the start positions
-    public int startX;
-    public int startY;
+    //these are the start and end positions
+    public Vector2 start;
+    public Vector2 end;
 
     private static MazeGenerator instance;
 
@@ -39,24 +39,28 @@ public class MazeGenerator : MonoBehaviour
         instance = this;
     }
 
+    //generator starting everything to make the maze
     public void Generator(int width, int height)
     {
+        end = new Vector2(width -1,height -1);
         grid = new Grid(width, height);
-        grid.init();
+        grid.init(start,end);
         generatePath();
     }
 
     private void Update()
-    {    
+    {
+        //running updat if there is something in updating
         if(updating != null)
         {
             updating();
         }
     }
 
+    //generatring the path and adding it to update so it can do its whole generation
     public void generatePath()
     {
-        GeneratePath generatePath = new GeneratePath(startX,startY,grid);
+        GeneratePath generatePath = new GeneratePath((int)start.x,(int)start.y,grid);
         updating += generatePath.startGenerator;
     }
     //this will make the maze visible by making a mesh out of it
@@ -79,6 +83,7 @@ public class MazeGenerator : MonoBehaviour
         }
     }
 
+    //maze generator instance to get acces to everything in here from other scripts
     public static MazeGenerator getInstance()
     {
         return instance;

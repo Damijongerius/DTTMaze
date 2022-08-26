@@ -11,11 +11,13 @@ public class Cell : CellBase
         this.y = y;
         this.x = x;
     }
+
     //this method is looking for neighbours that are not visited yet
     public List<Vector2> hasUnvisitedNeighbours(Grid grid)
     {
         List<Vector2> neighbours = new List<Vector2>();
-
+        
+        //for every direction checking for neighbour in grid
         try
         {
             if (grid.cells[(x + 1), y].visited == false)
@@ -32,7 +34,6 @@ public class Cell : CellBase
         {
 
         }
-        
 
         if (x > 0)
         {
