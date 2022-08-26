@@ -63,6 +63,15 @@ public class GeneratePath
             }
 
         }
+        else
+        {
+            Debug.Log("done");
+            MazeGenerator mg = MazeGenerator.getInstance();
+            mg.updating = null;
+            mg.updating += mg.generateTerrain;
+
+            mg.startDrawing = true;
+        }
     }
 
     public Grid getGrid()
