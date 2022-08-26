@@ -16,20 +16,23 @@ public class Cell : CellBase
     {
         List<Vector2> neighbours = new List<Vector2>();
 
-        if (grid.width >= x)
+        try
         {
             if (grid.cells[(x + 1), y].visited == false)
             {
                 neighbours.Add(new Vector2(x + 1, y));
             }
-        }
-        if (grid.height >= y)
-        {
+
             if (grid.cells[x, (y + 1)].visited == false)
             {
                 neighbours.Add(new Vector2(x, y + 1));
             }
+            }
+        catch
+        {
+
         }
+        
 
         if (x > 0)
         {

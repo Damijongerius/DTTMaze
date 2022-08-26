@@ -12,6 +12,7 @@ public class GeneratePath
     private Grid grid;
 
     private List<Path> pathList = new List<Path>();
+    private List<Path> pathListInactive = new List<Path>();
 
     private int a;
 
@@ -42,6 +43,7 @@ public class GeneratePath
                         if (newPath.delete)
                         {
                             Debug.Log("removing path amount:" + pathList.Count);
+                            pathListInactive.Add(newPath);
                             pathList.Remove(newPath);
                         }
                         else
@@ -67,6 +69,15 @@ public class GeneratePath
             mg.updating += mg.generateTerrain;
 
             mg.startDrawing = true;
+
+            foreach(List<Vector2> stack in grid.stacks)
+            {
+                Debug.Log("|||||||||||||||||||||||||||||||");
+                foreach(Vector2 v in stack)
+                {
+                    Debug.Log(v);
+                }
+            }
         }
     }
 

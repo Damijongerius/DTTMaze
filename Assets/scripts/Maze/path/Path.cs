@@ -27,8 +27,9 @@ public class Path
     public bool delete = false;
 
     //stack list location
-    private int index;
+    private int index = 0;
 
+    //chance of mutating
     private int chance;
 
     //constructor
@@ -71,28 +72,27 @@ public class Path
 
         //testing if their are unvisited neighbours in the list
         //and if it issnt null it will randomly choose a neighbour
-        Debug.Log(neighbours.Count);
+        //Debug.Log(neighbours.Count);
         if (neighbours.Count != 0)
         {
             int random = Random.Range(0, neighbours.Count);
 
             cell = grid.cells[(int)neighbours[random].x, (int)neighbours[random].y];
-            walking(cell);
 
             //if there is another neighbour in the list there will be a chance it will mutate and make another path
             chance++;
-            Debug.Log(chance);
-            if(Random.Range(chance, 10) == 10)
+            if(Random.Range(chance, 7) == 7)
             {
                 chance = 0;
                 int second = Random.Range(0, neighbours.Count);
                 if (grid.cells[(int)neighbours[second].x, (int)neighbours[second].y] != cell)
                 {
-                    //Debug.Log("mutating path");
                     Path path = new Path(generator, cell.x, cell.y, stack);
+                    walking(cell);
                     return path;
                 }
-            }  
+            }
+            walking(cell);
         }
         else
         {
@@ -118,7 +118,7 @@ public class Path
             stack.Add(new Vector2(x, y));
 
             removeWall(cell);
-            Debug.Log("walking from:" + x + "," + y + " to:" + cell.x + "," +  cell.y);
+            Debug.Log(index + "walking from:" + x + "," + y + " to:" + cell.x + "," +  cell.y);
 
             //setting the new positions 
             //and adding a checkmark so the code later will see ooh everything send back a mark so i can stop generating
@@ -148,7 +148,7 @@ public class Path
             //otherwise it will just return and run again
             if(stack[length] != start)
             {
-                Debug.Log("walkingback from:" + x + "," + y + " to:" + (int)stack[length].x + "," + (int)stack[length].y);
+                Debug.Log(index + "walkingback from:" + x + "," + y + " to:" + (int)stack[length].x + "," + (int)stack[length].y);
                 this.x = (int)stack[length].x;
                 this.y = (int)stack[length].y;
                 stack.RemoveAt(length);
