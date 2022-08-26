@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 /*
@@ -18,16 +20,13 @@ public class MazeGenerator : MonoBehaviour
     public Material floor;
     public GameObject empty;
 
-    public int width;
-    public int height;
-
     //these are the start positions
     public int startX;
     public int startY;
 
-    private int a;
+    private static MazeGenerator instance;
 
-    private static bool startDrawing = false;
+    public bool startDrawing = false;
 
     public List<List<Vector2>> vector2s = new List<List<Vector2>>();
 
@@ -35,28 +34,24 @@ public class MazeGenerator : MonoBehaviour
     private Grid grid;
 
     DrawMaze drawMaze;
-    void Start()
+    public MazeGenerator()
     {
-        grid = new Grid(width,height);
+        instance = this;
+    }
+
+    public void Generator(int width, int height)
+    {
+        grid = new Grid(width, height);
         grid.init();
         generatePath();
-
     }
 
     private void Update()
-    {
+    {    
         if(updating != null)
         {
             updating();
         }
-        a++;
-        if (a % 1000 * width * height == 0)
-        {
-            generateTerrain();
-            startDrawing = false;
-
-            vector2s = grid.stacks;
-        }   
     }
 
     public void generatePath()
@@ -67,21 +62,26 @@ public class MazeGenerator : MonoBehaviour
     //this will make the maze visible by making a mesh out of it
     public void generateTerrain()
     {
-        if(drawMaze != null)
+        if(startDrawing == true)
         {
-            List<GameObject> destroy = drawMaze.getMeshes();
-            foreach(GameObject go in destroy)
+            updating = null;
+            startDrawing = false;
+            if (drawMaze != null)
             {
-                Destroy(go);
+                List<GameObject> destroy = drawMaze.getMeshes();
+                foreach (GameObject go in destroy)
+                {
+                    Destroy(go);
+                }
             }
+            drawMaze = new DrawMaze(grid, floor, empty);
+            drawMaze.DrawTerrain();
         }
-        drawMaze = new DrawMaze(grid,floor, empty);
-        drawMaze.DrawTerrain();
     }
 
-    public static void FinishedGenerating()
+    public static MazeGenerator getInstance()
     {
-        startDrawing = true;
+        return instance;
     }
 
 
