@@ -33,13 +33,12 @@ public class Path
     private int chance;
 
     //constructor
-    public Path(GeneratePath _generator, int x, int y, List<Vector2> _stack)
+    public Path(GeneratePath _generator, int _x, int _y, List<Vector2> _stack)
     {
         this.generator = _generator;
 
         //this is so the script knows where its starting
-        this.x = x;
-        this.y = y;
+        (this.x, this.y) = (_x, _y);
 
         //this is for the stack backtracking so i know where it begon so it wont go furthur
         this.start = new Vector2(x, y);

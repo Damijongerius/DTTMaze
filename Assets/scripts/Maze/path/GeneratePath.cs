@@ -19,8 +19,7 @@ public class GeneratePath
     //constructor
     public GeneratePath(int _x, int _y, Grid _grid)
     {
-        this.startX = _x;
-        this.startY = _y;
+        (this.startX, this.startY) = (_x, _y);
 
         this.grid = _grid;
 

@@ -6,10 +6,9 @@ using UnityEngine;
 public class Cell : CellBase
 {
     //this constructor allows me to ask for some thing as a new cell is made
-    public Cell(int x, int y)
+    public Cell(int _x, int _y)
     {
-        this.y = y;
-        this.x = x;
+        (this.x, this.y) = (_x, _y);
     }
 
     //this method is looking for neighbours that are not visited yet

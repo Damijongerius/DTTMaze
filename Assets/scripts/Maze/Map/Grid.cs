@@ -14,13 +14,13 @@ public class Grid
     //in these stacks im going to save the last done moves
     public List<List<Vector2>> stacks = new List<List<Vector2>>();
     public int checkmarks = 1;
+
     public Grid(int _width, int _height) 
     {
-        this.width = _width;
-        this.height = _height;
+        (this.width, this.height) = (_width, _height);
     }
 
-    public void init(Vector2 start, Vector2 end)
+    public void init(Vector2 _start, Vector2 _end, Type _type)
     {
         this.cells = new Cell[width, height];
 
@@ -31,20 +31,15 @@ public class Grid
                 Cell cell = new Cell(x, y);
                 
                 //testing if its the start or end pos
-                if(x == start.x)
-                {
-                    if(y == start.y)
-                    {
-                        cell.start = true;
-                    }
-                }
+                if(x == _start.x && y == _start.y) cell.start = true;
+                if (x == _end.x && y == _end.y) cell.end = true;
 
-                if (x == end.x)
+                //random generator
+                if(_type == Type.PERLINNOISE)
                 {
-                    if (y == end.y)
-                    {
-                        cell.end = true;
-                    }
+                    //running function in PerlinNoise
+                    PerlinNoise pn = new PerlinNoise(this);
+                    pn.Randomize(0.1f);
                 }
 
                 this.cells[x, y] = cell;
