@@ -17,9 +17,15 @@ public class UIManager : MonoBehaviour
     private Button generate;
     private Button fullMazeView;
 
-    public TMP_InputField widthInput;
-    public TMP_InputField heightInput;
+    private TMP_InputField widthInput;
+    private TMP_InputField heightInput;
 
+    private Vector2 widthHeight;
+
+    public GameObject camera;
+
+    private bool canDo = false;
+    private Vector3 pos;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +38,15 @@ public class UIManager : MonoBehaviour
 
         generate.onClick.AddListener(RunGenerator);
         fullMazeView.onClick.AddListener(SetCameraPos);
+    }
+
+    private void Update()
+    {
+        if(canDo == true)
+        {
+            pos = camera.transform.position;
+            camera.transform.position = new Vector3(Mathf.Lerp(pos.x, widthHeight.x / 2, 0.0003f), Mathf.Lerp(pos.y, widthHeight.x + widthHeight.y / 3, 0.0003f), Mathf.Lerp(pos.z, widthHeight.y / 2, 0.0003f));
+        }
     }
 
 
@@ -79,13 +94,21 @@ public class UIManager : MonoBehaviour
                 Debug.Log(e);
                 Debug.Log("you have to put numbers in the text fields");
             }
+            widthHeight = wH;
             return wH;
         }
     }
 
     private void SetCameraPos()
     {
-
+        if(canDo == true)
+        {
+            canDo = false;
+        }
+        else
+        {
+            canDo = true;
+        }
     }
 
 
