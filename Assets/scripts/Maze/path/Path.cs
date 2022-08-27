@@ -33,13 +33,12 @@ public class Path
     private int chance;
 
     //constructor
-    public Path(GeneratePath _generator, int x, int y, List<Vector2> _stack)
+    public Path(GeneratePath _generator, int _x, int _y, List<Vector2> _stack)
     {
         this.generator = _generator;
 
         //this is so the script knows where its starting
-        this.x = x;
-        this.y = y;
+        (this.x, this.y) = (_x, _y);
 
         //this is for the stack backtracking so i know where it begon so it wont go furthur
         this.start = new Vector2(x, y);
@@ -78,20 +77,6 @@ public class Path
             int random = Random.Range(0, neighbours.Count);
 
             cell = grid.cells[(int)neighbours[random].x, (int)neighbours[random].y];
-
-            //if there is another neighbour in the list there will be a chance it will mutate and make another path
-            chance++;
-            if(Random.Range(chance, 7) == 7)
-            {
-                chance = 0;
-                int second = Random.Range(0, neighbours.Count);
-                if (grid.cells[(int)neighbours[second].x, (int)neighbours[second].y] != cell)
-                {
-                    Path path = new Path(generator, cell.x, cell.y, stack);
-                    walking(cell);
-                    return path;
-                }
-            }
             walking(cell);
         }
         else

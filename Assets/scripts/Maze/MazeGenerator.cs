@@ -40,11 +40,11 @@ public class MazeGenerator : MonoBehaviour
     }
 
     //generator starting everything to make the maze
-    public void Generator(int width, int height)
+    public void Generator(int _width, int _height)
     {
-        end = new Vector2(width -1,height -1);
-        grid = new Grid(width, height);
-        grid.init(start,end);
+        end = new Vector2(_width -1,_height -1);
+        grid = new Grid(_width, _height);
+        grid.init(start,end,Type.PERLINNOISE);
         generatePath();
     }
 

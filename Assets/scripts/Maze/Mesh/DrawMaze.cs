@@ -19,8 +19,7 @@ public class DrawMaze
     //constructor
     public DrawMaze(Grid _grid, Material _mat, GameObject _gameObject)
     {
-        this.width = _grid.width;
-        this.height = _grid.height;
+        (this.width, this.height) = (_grid.width, grid.height);
 
         this.empty = _gameObject;
 
@@ -106,7 +105,7 @@ public class DrawMaze
     }
 
     //just the basic uvs
-    private Vector2[] getUvs(Cell cell)
+    private Vector2[] getUvs(Cell _cell)
     {
         Vector2 uv00;
         Vector2 uv10;
@@ -114,7 +113,7 @@ public class DrawMaze
         Vector2 uv11;
 
         //choosing pos on material based of start or end
-        if (cell.start == true)
+        if (_cell.start == true)
         {
             //corners of material
             uv00 = new Vector2(0, 0.52f);
@@ -122,7 +121,7 @@ public class DrawMaze
             uv01 = new Vector2(0.49f, 1f);
             uv11 = new Vector2(0, 1f);
         }
-        else if (cell.end == true)
+        else if (_cell.end == true)
         {
             //corners of material
             uv00 = new Vector2(0.52f, 0);
