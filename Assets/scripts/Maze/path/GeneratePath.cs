@@ -31,26 +31,17 @@ public class GeneratePath
     {
         if (grid.checkmarks < grid.width * grid.height)
         {
-            //Debug.Log(grid.checkmarks + "| | | |" + grid.width * grid.height);
             try
             {
                 foreach (Path p in pathList)
-                { 
-                    Path newPath = p.Walk();
-                    if (newPath != null)
+                {
+                    if (p.delete)
                     {
-                        if (newPath.delete)
-                        {
-                            Debug.Log("removing path amount:" + pathList.Count);
-                            pathListInactive.Add(newPath);
-                            pathList.Remove(newPath);
-                        }
-                        else
-                        {
-                            Debug.Log("adding path amount:" + pathList.Count);
-                            pathList.Add((Path)newPath);
-                        }
+                        Debug.Log("removing path amount:" + pathList.Count);
+                        pathListInactive.Add(p);
+                        pathList.Remove(p);
                     }
+                    p.Walk();
                 }
                 
             }
@@ -64,15 +55,18 @@ public class GeneratePath
         {
             MazeGenerator mg = MazeGenerator.getInstance();
             mg.updating = null;
-            mg.updating += mg.generateTerrain;
-
-            mg.startDrawing = true;
         }
     }
 
     public Grid getGrid()
     {
         return grid;
+    }
+
+    public void AddPath(Path newPath)
+    {
+        Debug.Log("adding path amount:" + pathList.Count);
+         pathList.Add((Path)newPath);
     }
 
 }

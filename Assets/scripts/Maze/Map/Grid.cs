@@ -8,6 +8,8 @@ public class Grid
     public int width;
     public int height;
 
+    private Type type;
+
     public Cell[,] cells;
 
     //i chose to make more stacks so i can make it more like a tree
@@ -23,7 +25,7 @@ public class Grid
     public void init(Vector2 _start, Vector2 _end, Type _type)
     {
         this.cells = new Cell[width, height];
-
+        this.type = _type;
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -33,17 +35,16 @@ public class Grid
                 //testing if its the start or end pos
                 if(x == _start.x && y == _start.y) cell.start = true;
                 if (x == _end.x && y == _end.y) cell.end = true;
-
-                //random generator
-                if(_type == Type.PERLINNOISE)
-                {
-                    //running function in PerlinNoise
-                    PerlinNoise pn = new PerlinNoise(this);
-                    pn.Randomize(0.1f);
-                }
-
                 this.cells[x, y] = cell;
             }
+        }
+
+        //random generator
+        if (_type == Type.PERLINNOISE)
+        {
+            //running function in PerlinNoise
+            PerlinNoise pn = new PerlinNoise(this);
+            this.cells = pn.Randomize();
         }
     }
 

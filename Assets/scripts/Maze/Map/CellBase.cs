@@ -10,7 +10,7 @@ using UnityEngine;
 public class CellBase
 {
     //this is for every grid pos that is not going to be used
-    public bool Use;
+    public bool Use = true;
 
     //this is for maze connection
     public bool IsPortal;

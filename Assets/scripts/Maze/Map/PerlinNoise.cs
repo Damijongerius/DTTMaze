@@ -9,7 +9,6 @@ using UnityEngine;
 */
 public class PerlinNoise
 {
-    private float[,] noiseMap;
     private float[,] maskMap;
 
     private Grid grid;
@@ -20,32 +19,48 @@ public class PerlinNoise
         this.grid = _grid;
         this.widthHeight = new Vector2(_grid.width, _grid.height);
     }
-    public void Randomize(float _scale)
+    public Cell[,] Randomize()
     {
-        GenerateNoiseMap(_scale);
+        float size = 0.0001315f;
+        float start;
+        if(widthHeight.x < 1000 && widthHeight.y < 1000)
+        {
+            start = 0.11f - (size * (widthHeight.x + widthHeight.y));
+        }
+        else
+        {
+            start = 0.11f - (size * (widthHeight.x / 3 + widthHeight.y / 3));
+        }
+        Debug.Log(start);
+
+
+        float[,] noiseMap = GenerateNoiseMap(start);
+        //400 0.04
+        //20 0.09
 
         for (int x = 0; x < widthHeight.x; x++)
         {
             for (int y = 0; y < widthHeight.y; y++)
             {
-
+                if (noiseMap[x,y] <= 0.5f) grid.cells[x, y].Use = false;
             }
         }
+        return grid.cells;
     }
 
-    public void GenerateNoiseMap( float _scale)
+    public float[,] GenerateNoiseMap(float _scale)
     {
+        float[,] noiseMap = new float[(int)widthHeight.x, (int)widthHeight.y];
         (float xOffset, float yOffset) = (Random.Range(-10000f, 10000f), Random.Range(-10000f, 10000f));
 
-        noiseMap = new float[(int)widthHeight.x, (int)widthHeight.y];
-
-        for (int x = 0; x < widthHeight.x; x++)
+        for (int x = 0; x < (int)widthHeight.x; x++)
         {
-            for (int y = 0; y < widthHeight.y; y++)
+            for (int y = 0; y < (int)widthHeight.y; y++)
             {
                 noiseMap[x, y] = Mathf.PerlinNoise(x * _scale + xOffset, y * _scale + yOffset);
             }
         }
+        return noiseMap;
     }
     public void Mask()
     {
