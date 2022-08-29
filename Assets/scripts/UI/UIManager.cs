@@ -67,11 +67,11 @@ public class UIManager : MonoBehaviour
                 wH.y = int.Parse(widthInput.text);
 
                 //testing if variables are in between right cords
-                if (wH.x > 250)
+                if (wH.x > 2000)
                 {
                     return new Vector2(0,0);
                 }
-                if (wH.y > 250)
+                if (wH.y > 2000)
                 {
                     return new Vector2(0, 0);
                 }

@@ -14,30 +14,60 @@ public class DrawMaze
     private Material mat;
     private GameObject empty;
 
-    private List<GameObject> objects = new List<GameObject> ();
+    public GameObject[,] objects;
+
+    private MazeGenerator generator;
 
     //constructor
     public DrawMaze(Grid _grid, Material _mat, GameObject _gameObject)
     {
+<<<<<<< Updated upstream
         this.width = _grid.width;
         this.height = _grid.height;
+=======
+        (this.width, this.height) = (_grid.width, _grid.height);
+>>>>>>> Stashed changes
 
         this.empty = _gameObject;
 
         this.grid = _grid;
         this.mat = _mat;
+
+        objects = new GameObject[CalculateAmount(width), CalculateAmount(height)];
+
+        generator = MazeGenerator.getInstance();
     }
 
     //create all the triangles,verts and uv's
-    public void DrawTerrain()
+    public Vector2 DrawTerrain(int iv, int jv)
     {
-        for (int i = 0; i < CalculateAmount(width); i++)
+        if (jv == CalculateAmount(height))
         {
-            for (int j = 0; j < CalculateAmount(height); j++)
+            jv = 0;
+            iv++;
+
+        }
+        if (iv == CalculateAmount(width))
+        {
+            iv = 0;
+        }
+
+        for (int i = iv; i < CalculateAmount(width); i++)
+        {
+            for (int j = jv; j < CalculateAmount(height); j++)
             {
-                
-                GameObject obj = MazeGenerator.Instantiate(empty, new Vector3(i * 10, 0, j * 10), new Quaternion(0, 0, 0, 0));
-                objects.Add(obj);
+                GameObject obj;
+                if (objects[i , j] != null)
+                {
+                    obj = objects[i , j];
+                }
+                else
+                {
+                    obj = MazeGenerator.Instantiate(empty, new Vector3(i * 10, 0, j * 10), new Quaternion(0, 0, 0, 0));
+                    obj.name = $"{i},{j}";
+                    objects[i, j] = obj;
+                }
+
 
                 Mesh mesh = new Mesh();
                 List<Vector3> vertices = new List<Vector3>();
@@ -50,22 +80,24 @@ public class DrawMaze
                     for (int y = 0; y + (j * 10) < CalculateLeftOver(height, j) + (j * 10); y++)
                     {
                         Cell cell = grid.cells[x + (i * 10), y + (j * 10)];
-
-                        quads quads = new quads(x, y);
-                        Vector2[] uv = getUvs(cell);
-
-                        //for 5 faces
-                        for (int k = 0; k < 5; k++)
+                        if(cell.Use == true)
                         {
-                            if (cell.walls[k] == true)
+                            quads quads = new quads(x, y);
+                            Vector2[] uv = getUvs(cell);
+
+                            //for 5 faces
+                            for (int k = 0; k < 5; k++)
                             {
-                                Vector3[] v = quads.Face(k);
-                                //for 2 triangle corners
-                                for (int l = 0; l < 6; l++)
+                                if (cell.walls[k] == true)
                                 {
-                                    vertices.Add(v[l]);
-                                    triangles.Add(triangles.Count);
-                                    uvs.Add(uv[l]);
+                                    Vector3[] v = quads.Face(k);
+                                    //for 2 triangle's with 3 corners
+                                    for (int l = 0; l < 6; l++)
+                                    {
+                                        vertices.Add(v[l]);
+                                        triangles.Add(triangles.Count);
+                                        uvs.Add(uv[l]);
+                                    }
                                 }
                             }
                         }
@@ -77,14 +109,25 @@ public class DrawMaze
                 mesh.uv = uvs.ToArray();
                 mesh.RecalculateNormals();
 
-                MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
+                MeshFilter meshFilter;
+                MeshRenderer meshRenderer;
+                if (obj.GetComponent<MeshRenderer>() == null)
+                {
+                    meshFilter = obj.AddComponent<MeshFilter>();
+                    meshRenderer = obj.AddComponent<MeshRenderer>();
+                }
+                else
+                {
+                    meshFilter = obj.GetComponent<MeshFilter>();
+                }
                 meshFilter.mesh = mesh;
 
-                MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
-
                 DrawTexture(obj);
+                break;
             }
+            break;
         }
+        return new Vector2(iv,(jv + 1));
     }
 
     //this method will simply calculate howmanytimes a new mesh will be created
@@ -152,7 +195,7 @@ public class DrawMaze
         meshRenderer.material = mat;
     }
 
-    public List<GameObject> getMeshes()
+    public GameObject[,] getMeshes()
     {
         return objects;
     }

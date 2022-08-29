@@ -51,7 +51,7 @@ public class Path
     }
 
     //the movement of the script
-    public Path Walk()
+    public void Walk()
     {
         // getting the grid so i can get the cells
         Grid grid = generator.getGrid();
@@ -80,16 +80,17 @@ public class Path
             cell = grid.cells[(int)neighbours[random].x, (int)neighbours[random].y];
 
             //if there is another neighbour in the list there will be a chance it will mutate and make another path
-            chance++;
-            if(Random.Range(chance, 7) == 7)
+            if(Random.Range(0,100) >= 90)
             {
-                chance = 0;
-                int second = Random.Range(0, neighbours.Count);
-                if (grid.cells[(int)neighbours[second].x, (int)neighbours[second].y] != cell)
+                for(int i = 0; i < neighbours.Count; i++)
                 {
-                    Path path = new Path(generator, cell.x, cell.y, stack);
-                    walking(cell);
-                    return path;
+                    if (grid.cells[(int)neighbours[i].x, (int)neighbours[i].y] != cell)
+                    {
+                        Cell Mutate = grid.cells[(int)neighbours[i].x, (int)neighbours[i].y];
+                        Path path = new Path(generator, Mutate.y, Mutate.x, stack);
+                        Debug.Log(path);
+                        generator.AddPath(path);
+                    }
                 }
             }
             walking(cell);
@@ -100,7 +101,6 @@ public class Path
             //Debug.Log("no possible neighbour");
             if (walkBack())
             {
-                return this;
             }
             else
             {
@@ -131,7 +131,7 @@ public class Path
             if (index == 0)
             {
                 grid.stacks.Add(stack);
-                index = grid.stacks.Count;
+                index = grid.stacks.Count -1;
             }
             else
             {
@@ -148,7 +148,7 @@ public class Path
             //otherwise it will just return and run again
             if(stack[length] != start)
             {
-                Debug.Log(index + "walkingback from:" + x + "," + y + " to:" + (int)stack[length].x + "," + (int)stack[length].y);
+               Debug.Log(index + "walkingback from:" + x + "," + y + " to:" + (int)stack[length].x + "," + (int)stack[length].y);
                 this.x = (int)stack[length].x;
                 this.y = (int)stack[length].y;
                 stack.RemoveAt(length);
@@ -213,6 +213,5 @@ public class Path
                 }
             }
         }
-        return null;
     }
 }

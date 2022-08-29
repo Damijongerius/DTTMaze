@@ -7,6 +7,15 @@
 */
 public class CellBase
 {
+<<<<<<< Updated upstream:Assets/scripts/Maze/CellBase.cs
+=======
+    //this is for every grid pos that is not going to be used
+    public bool Use = true;
+
+    //this is for maze connection
+    public bool IsPortal;
+    public Vector2 ConnectPoint;
+>>>>>>> Stashed changes:Assets/scripts/Maze/Map/CellBase.cs
 
     //bool for if its the end or the start
     public bool start;

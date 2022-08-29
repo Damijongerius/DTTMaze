@@ -20,12 +20,12 @@ public class Cell : CellBase
         //for every direction checking for neighbour in grid
         try
         {
-            if (grid.cells[(x + 1), y].visited == false)
+            if (grid.cells[(x + 1), y].visited == false && grid.cells[(x + 1), y].Use == true)
             {
                 neighbours.Add(new Vector2(x + 1, y));
             }
 
-            if (grid.cells[x, (y + 1)].visited == false)
+            if (grid.cells[x, (y + 1)].visited == false && grid.cells[x, (y + 1)].Use == true)
             {
                 neighbours.Add(new Vector2(x, y + 1));
             }
@@ -37,7 +37,7 @@ public class Cell : CellBase
 
         if (x > 0)
         {
-            if (grid.cells[(x - 1), y].visited == false)
+            if (grid.cells[(x - 1), y].visited == false && grid.cells[(x - 1), y].Use == true)
             {
                 neighbours.Add(new Vector2(x - 1, y));
             }
@@ -45,7 +45,7 @@ public class Cell : CellBase
 
         if (y > 0)
         {
-            if (grid.cells[x, (y - 1)].visited == false)
+            if (grid.cells[x, (y - 1)].visited == false && grid.cells[x, (y - 1)].Use == true)
             {
                 neighbours.Add(new Vector2(x, y - 1));
             }
