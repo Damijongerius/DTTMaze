@@ -21,8 +21,8 @@ public class MazeGenerator : MonoBehaviour
     public GameObject empty;
 
     //these are the start and end positions
-    public Vector2 start;
-    public Vector2 end;
+    public static Vector2 start;
+    public static Vector2 end;
 
     private static MazeGenerator instance;
 

@@ -37,7 +37,7 @@ public class Grid
                 Cell cell = new Cell(x, y);
                 
                 //testing if its the start or end pos
-                if(x == _start.x && y == _start.y) cell.start = true;
+                if (x == _start.x && y == _start.y) cell.start = true;
                 if (x == _end.x && y == _end.y) cell.end = true;
                 this.cells[x, y] = cell;
             }

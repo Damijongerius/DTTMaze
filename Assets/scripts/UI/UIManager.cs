@@ -68,6 +68,7 @@ public class UIManager : MonoBehaviour
         if(wH.x != 0)
         {
             MazeGenerator.getInstance().Generator((int)wH.x,(int)wH.y, GetType());
+            Destroy(Player);
         }
         else
         {
@@ -87,11 +88,11 @@ public class UIManager : MonoBehaviour
                 wH.y = int.Parse(widthInput.text);
 
                 //testing if variables are in between right cords
-                if (wH.x > 20000)
+                if (wH.x > 2000)
                 {
                     return new Vector2(0,0);
                 }
-                if (wH.y > 20000)
+                if (wH.y > 2000)
                 {
                     return new Vector2(0, 0);
                 }
@@ -104,7 +105,7 @@ public class UIManager : MonoBehaviour
                     return new Vector2(0, 0);
                 }
             }
-            catch(Exception e)
+            catch
             {
                 //if its not possible it will say this
                 Debug.Log("you have to put numbers in the text fields");

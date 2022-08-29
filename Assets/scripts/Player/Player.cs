@@ -6,8 +6,6 @@ public class Player : MonoBehaviour
 {
     public float speed;
 
-    private Vector3 position;
-
     private Grid grid;
 
     private Rigidbody rb;
@@ -18,9 +16,10 @@ public class Player : MonoBehaviour
         grid = Grid.GetInstance();
         foreach(Cell cell in grid.cells)
         {
-            if(cell.start)
+            if(cell.start == true && cell.Use == true)
             {
-                position = new Vector3(cell.x, 0, cell.y);
+                Debug.Log(cell.x + "," + cell.y + "|" + cell.Use);
+                transform.position = new Vector3(cell.x, 0, cell.y);
             }
         }
     }
@@ -28,7 +27,6 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Move();
-        Debug.Log("a");
     }
 
     public void Move()
@@ -60,7 +58,7 @@ public class Player : MonoBehaviour
             transform.position = new Vector3(cell.ConnectPoint.x, 0, cell.ConnectPoint.y);
         }else if (cell.end)
         {
-
+            Destroy(gameObject);
         }
     }
 }
