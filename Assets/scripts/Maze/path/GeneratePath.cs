@@ -19,8 +19,7 @@ public class GeneratePath
     //constructor
     public GeneratePath(int _x, int _y, Grid _grid)
     {
-        this.startX = _x;
-        this.startY = _y;
+        (this.startX, this.startY) = (_x, _y);
 
         this.grid = _grid;
 
@@ -28,52 +27,61 @@ public class GeneratePath
         pathList.Add(path);
     }
 
+    //generating the maze
     public void startGenerator()
     {
+        //aslong as it doessn't have generated the full maze it wil continue calculating
         if (grid.checkmarks < grid.width * grid.height)
         {
-            //Debug.Log(grid.checkmarks + "| | | |" + grid.width * grid.height);
+            //this try catch is for the changing of the list impacting the foreach
             try
             {
+                a++;
                 foreach (Path p in pathList)
-                { 
-                    Path newPath = p.Walk();
-                    if (newPath != null)
+                {
+                    if (p.delete)
                     {
-                        if (newPath.delete)
+                        if(pathList.Count == 1)
                         {
-                            Debug.Log("removing path amount:" + pathList.Count);
-                            pathListInactive.Add(newPath);
-                            pathList.Remove(newPath);
+                            Vector2 end = p.history[Random.Range(0, p.history.Count)];
+                            grid.cells[(int)end.x, (int)end.y].end = true;
+
+                            MazeGenerator mg = MazeGenerator.getInstance();
+                            mg.end = end;
                         }
-                        else
-                        {
-                            Debug.Log("adding path amount:" + pathList.Count);
-                            pathList.Add((Path)newPath);
-                        }
+                        pathListInactive.Add(p);
+                        pathList.Remove(p);
                     }
-                }
-                
+                    if(a % 1 == 0)
+                    {
+                        p.Walk();
+                    }
+                }   
             }
             catch
             {
                 return;
             }
-
         }
+        //if its done it will stop looping
         else
         {
+            Debug.Log("done");
             MazeGenerator mg = MazeGenerator.getInstance();
             mg.updating = null;
-            mg.updating += mg.generateTerrain;
-
-            mg.startDrawing = true;
         }
     }
 
+    //grid for path
     public Grid getGrid()
     {
         return grid;
+    }
+
+    //adding path if needed
+    public void AddPath(Path newPath)
+    {
+         pathList.Add((Path)newPath);
     }
 
 }

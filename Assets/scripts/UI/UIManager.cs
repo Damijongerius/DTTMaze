@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
     public GameObject widthfield;
     public GameObject heightfield;
 
+    public GameObject dropDownObj;
+
     //ui elements
     private Button generate;
     private Button fullMazeView;
@@ -21,9 +23,11 @@ public class UIManager : MonoBehaviour
     private TMP_InputField widthInput;
     private TMP_InputField heightInput;
 
+    private TMP_Dropdown dropdown;
+
     //width height for centering camera
     private Vector2 widthHeight;
-    public GameObject camera;
+    public new GameObject camera;
     private bool canDo = false;
     private Vector3 pos;
 
@@ -35,6 +39,8 @@ public class UIManager : MonoBehaviour
 
         widthInput = widthfield.GetComponent<TMP_InputField>();
         heightInput = heightfield.GetComponent<TMP_InputField>();
+
+        dropdown = dropDownObj.GetComponent<TMP_Dropdown>();
 
         //adding an eventlistener to the buttons
         generate.onClick.AddListener(RunGenerator);
@@ -49,7 +55,7 @@ public class UIManager : MonoBehaviour
         //testing variables if they are in between the right cords
         if(wH.x != 0)
         {
-            MazeGenerator.getInstance().Generator((int)wH.x,(int)wH.y);
+            MazeGenerator.getInstance().Generator((int)wH.x,(int)wH.y, GetType());
         }
         else
         {
@@ -67,11 +73,11 @@ public class UIManager : MonoBehaviour
                 wH.y = int.Parse(widthInput.text);
 
                 //testing if variables are in between right cords
-                if (wH.x > 250)
+                if (wH.x > 20000)
                 {
                     return new Vector2(0,0);
                 }
-                if (wH.y > 250)
+                if (wH.y > 20000)
                 {
                     return new Vector2(0, 0);
                 }
@@ -108,14 +114,27 @@ public class UIManager : MonoBehaviour
             canDo = true;
         }
     }
-
+    
     private void Update()
     {
         if (canDo == true)
         {
             pos = camera.transform.position;
+            //lerping camera pos
             camera.transform.position = new Vector3(Mathf.Lerp(pos.x, widthHeight.x / 2, 0.001f), Mathf.Lerp(pos.y, widthHeight.x / 2 + widthHeight.y / 2, 0.001f), Mathf.Lerp(pos.z, widthHeight.y / 2, 0.001f));
         }
+    }
+
+    private new Type GetType()
+    {
+        if(dropdown.value == 0)
+        {
+            return Type.SQUARE;
+        }else if(dropdown.value == 1)
+        {
+            return Type.PERLINNOISE;
+        }
+        return Type.SQUARE;
     }
 
 

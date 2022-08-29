@@ -26,27 +26,49 @@ public class MazeGenerator : MonoBehaviour
 
     private static MazeGenerator instance;
 
-    public bool startDrawing = false;
-
     public List<List<Vector2>> vector2s = new List<List<Vector2>>();
+
+    //loop vector
+    private Vector2 ivJv = new Vector2(0,0);
 
     //here is the grid class containing everything about the maze
     private Grid grid;
+    private DrawMaze drawMaze;
 
-    DrawMaze drawMaze;
+
+
     public MazeGenerator()
     {
         instance = this;
     }
 
     //generator starting everything to make the maze
-    public void Generator(int width, int height)
+    public void Generator(int _width, int _height, Type type)
     {
-        end = new Vector2(width -1,height -1);
-        grid = new Grid(width, height);
-        grid.init(start,end);
+        end = new Vector2(_width -1,_height -1);
+        grid = new Grid(_width, _height);
+        grid.init(start,end, type);
+        if (drawMaze == null)
+        {
+            InvokeRepeating("generateTerrain", 0.0001f, 0.0001f);
+        }
+        else
+        {
+            for(int i = 0; i < drawMaze.objects.GetLength(0); i++)
+            {
+                for(int j = 0; j < drawMaze.objects.GetLength(1); j++)
+                {
+                    Destroy(drawMaze.objects[i,j]);
+                }
+            }
+            ivJv = new Vector2(0, 0);
+
+        }
+        drawMaze = new DrawMaze(grid, floor, empty);
         generatePath();
     }
+
+
 
     private void Update()
     {
@@ -66,20 +88,9 @@ public class MazeGenerator : MonoBehaviour
     //this will make the maze visible by making a mesh out of it
     public void generateTerrain()
     {
-        if(startDrawing == true)
+        if (drawMaze != null)
         {
-            updating = null;
-            startDrawing = false;
-            if (drawMaze != null)
-            {
-                List<GameObject> destroy = drawMaze.getMeshes();
-                foreach (GameObject go in destroy)
-                {
-                    Destroy(go);
-                }
-            }
-            drawMaze = new DrawMaze(grid, floor, empty);
-            drawMaze.DrawTerrain();
+            ivJv = drawMaze.DrawTerrain((int)ivJv.x, (int)ivJv.y);
         }
     }
 

@@ -8,22 +8,25 @@ public class Grid
     public int width;
     public int height;
 
+    private Type type;
+
     public Cell[,] cells;
 
     //i chose to make more stacks so i can make it more like a tree
     //in these stacks im going to save the last done moves
     public List<List<Vector2>> stacks = new List<List<Vector2>>();
     public int checkmarks = 1;
+    public int needed;
+
     public Grid(int _width, int _height) 
     {
-        this.width = _width;
-        this.height = _height;
+        (this.width, this.height) = (_width, _height);
     }
 
-    public void init(Vector2 start, Vector2 end)
+    public void init(Vector2 _start, Vector2 _end, Type _type)
     {
         this.cells = new Cell[width, height];
-
+        this.type = _type;
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -31,24 +34,19 @@ public class Grid
                 Cell cell = new Cell(x, y);
                 
                 //testing if its the start or end pos
-                if(x == start.x)
-                {
-                    if(y == start.y)
-                    {
-                        cell.start = true;
-                    }
-                }
-
-                if (x == end.x)
-                {
-                    if (y == end.y)
-                    {
-                        cell.end = true;
-                    }
-                }
-
+                if(x == _start.x && y == _start.y) cell.start = true;
+                if (x == _end.x && y == _end.y) cell.end = true;
                 this.cells[x, y] = cell;
             }
+        }
+
+        //random generator
+        if (_type == Type.PERLINNOISE)
+        {
+            //running function in PerlinNoise
+            PerlinNoise pn = new PerlinNoise(this);
+            this.cells = pn.Randomize();
+            needed = width * height;
         }
     }
 
