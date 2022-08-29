@@ -14,7 +14,6 @@ public class GeneratePath
     private List<Path> pathList = new List<Path>();
     private List<Path> pathListInactive = new List<Path>();
 
-    private int a;
 
     //constructor
     public GeneratePath(int _x, int _y, Grid _grid)
@@ -36,7 +35,6 @@ public class GeneratePath
             //this try catch is for the changing of the list impacting the foreach
             try
             {
-                a++;
                 foreach (Path p in pathList)
                 {
                     if (p.delete)
@@ -44,18 +42,20 @@ public class GeneratePath
                         if(pathList.Count == 1)
                         {
                             Vector2 end = p.history[Random.Range(0, p.history.Count)];
-                            grid.cells[(int)end.x, (int)end.y].end = true;
-
-                            MazeGenerator mg = MazeGenerator.getInstance();
-                            mg.end = end;
+                            Vector2 end2 = MazeGenerator.end;
+                            Debug.Log(" " + end2 + " == "  + (grid.width - 1) + "," + (grid.height - 1));
+                            if (MazeGenerator.end == new Vector2(grid.width -1, grid.height -1) && grid.cells[grid.width - 1, grid.height - 1].Use == false)
+                            {
+                                grid.cells[(int)end.x, (int)end.y].end = true;
+                                Debug.Log(MazeGenerator.end);
+                                MazeGenerator.end = end;
+                            }
                         }
                         pathListInactive.Add(p);
                         pathList.Remove(p);
                     }
-                    if(a % 1 == 0)
-                    {
                         p.Walk();
-                    }
+
                 }   
             }
             catch
@@ -69,6 +69,18 @@ public class GeneratePath
             Debug.Log("done");
             MazeGenerator mg = MazeGenerator.getInstance();
             mg.updating = null;
+
+            if (pathList.Count == 1)
+            {
+                Vector2 end = pathList[0].history[Random.Range(0, pathList[0].history.Count)];
+                Vector2 end2 = MazeGenerator.end;
+                if (MazeGenerator.end == new Vector2(grid.width - 1, grid.height - 1) && grid.cells[grid.width - 1, grid.height - 1].Use == false)
+                {
+                    grid.cells[(int)end.x, (int)end.y].end = true;
+                    Debug.Log(MazeGenerator.end);
+                    MazeGenerator.end = end;
+                }
+            }
         }
     }
 

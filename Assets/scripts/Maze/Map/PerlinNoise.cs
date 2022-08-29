@@ -50,6 +50,7 @@ public class PerlinNoise
                 if (noiseMap[x,y] <= 0.5f) grid.cells[x, y].Use = false;
             }
         }
+        Filter();
         return grid.cells;
     }
 
@@ -69,5 +70,24 @@ public class PerlinNoise
             }
         }
         return noiseMap;
+    }
+
+    public void Filter()
+    {
+        for (int x = 0; x < (int)widthHeight.x; x++)
+        {
+            for (int y = 0; y < (int)widthHeight.y; y++)
+            {
+                if (grid.cells[x, y].Use == true)
+                {
+                    List<Vector2> neighbours = grid.cells[x, y].hasUnvisitedNeighbours(grid);
+
+                    if(neighbours.Count <= 1)
+                    {
+                        grid.cells[x, y].Use = false;
+                    }
+                }
+            }
+        }
     }
 }

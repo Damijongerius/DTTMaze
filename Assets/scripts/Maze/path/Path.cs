@@ -27,9 +27,6 @@ public class Path
 
     public bool delete = false;
 
-    //stack list location
-    private int index = 0;
-
     //chance of mutating
     private int chance;
 
@@ -80,12 +77,11 @@ public class Path
             this.x = Random.Range(0, grid.width);
             this.y = Random.Range(0, grid.height);
 
-            if(grid.cells[x, y].Use == true)
+            if(grid.cells[x, y].Use == true && grid.cells[x, y].end == false)
             {
                 grid.cells[x, y].start = true;
                 start = new Vector2(x, y);
-                MazeGenerator mg = MazeGenerator.getInstance();
-                mg.start = start;
+                MazeGenerator.start = start;
             }
         }
 
@@ -121,7 +117,6 @@ public class Path
             grid.cells[x, y].visited = true;
             stack.Add(new Vector2(x, y));
             history.Add(new Vector2(x, y));
-
             portal = history[Random.Range(0, history.Count)];
 
             removeWall(cell);
@@ -133,6 +128,11 @@ public class Path
             
             cell.visited = true;
             grid.checkmarks++;
+
+            if (history.Contains(start))
+            {
+                history.Remove(start);
+            }
         }
 
         //letting the class go back to an older pos

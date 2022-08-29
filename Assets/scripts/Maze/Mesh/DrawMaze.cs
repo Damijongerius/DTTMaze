@@ -107,17 +107,23 @@ public class DrawMaze
 
                 MeshFilter meshFilter;
                 MeshRenderer meshRenderer;
+                MeshCollider collider;
                 if (obj.GetComponent<MeshRenderer>() == null)
                 {
                     meshFilter = obj.AddComponent<MeshFilter>();
                     meshRenderer = obj.AddComponent<MeshRenderer>();
+                    collider = obj.AddComponent<MeshCollider>();
                 }
                 else
                 {
                     meshFilter = obj.GetComponent<MeshFilter>();
+                    collider = obj.GetComponent<MeshCollider>();
                 }
-                meshFilter.mesh = mesh;
-
+                if(mesh != collider.sharedMesh)
+                {
+                    meshFilter.mesh = mesh;
+                    collider.sharedMesh = mesh;
+                }
                 DrawTexture(obj);
                 break;
             }
