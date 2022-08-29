@@ -18,9 +18,12 @@ public class Grid
     public int checkmarks = 1;
     public int needed;
 
+    private static Grid instance;
+
     public Grid(int _width, int _height) 
     {
         (this.width, this.height) = (_width, _height);
+        instance = this;
     }
 
     public void init(Vector2 _start, Vector2 _end, Type _type)
@@ -57,5 +60,10 @@ public class Grid
             return true;
         }
         return false;
+    }
+
+    public static Grid GetInstance()
+    {
+        return instance;
     }
 }
