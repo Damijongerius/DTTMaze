@@ -47,6 +47,7 @@ public class DrawMaze
             iv = 0;
         }
 
+#pragma warning disable CS0162 // Unreachable code detected
         for (int i = iv; i < CalculateAmount(width); i++)
         {
             for (int j = jv; j < CalculateAmount(height); j++)
@@ -122,6 +123,7 @@ public class DrawMaze
             }
             break;
         }
+#pragma warning restore CS0162 // Unreachable code detected
         return new Vector2(iv,(jv + 1));
     }
 
@@ -168,6 +170,14 @@ public class DrawMaze
             uv01 = new Vector2(1f, 0.48f);
             uv11 = new Vector2(0.52f, 0.48f);
         }
+        else if(_cell.IsPortal == true)
+        {
+            //corners of material
+            uv00 = new Vector2(0.52f, 0.52f);
+            uv10 = new Vector2(0.99f, 0.52f);
+            uv01 = new Vector2(0.99f, 0.99f);
+            uv11 = new Vector2(0.52f, 0.99f);
+        }
         else
         {
             //corners of material
@@ -176,6 +186,7 @@ public class DrawMaze
             uv01 = new Vector2(0.48f, 0.48f);
             uv11 = new Vector2(0.01f, 0.48f);
         }
+
 
         //pos for triangles
         Vector2[] uv = new Vector2[] { uv00, uv10, uv01, uv10, uv11, uv01 };

@@ -13,6 +13,7 @@ public class Path
 {
     //path history
     private List<Vector2> stack = new List<Vector2>();
+    public List<Vector2> history = new List<Vector2>();
 
     //starting pos
     private Vector2 start;
@@ -21,8 +22,8 @@ public class Path
     private readonly GeneratePath generator;
 
     //position
-    private int x;
-    private int y;
+    public int x;
+    public int y;
 
     public bool delete = false;
 
@@ -31,6 +32,10 @@ public class Path
 
     //chance of mutating
     private int chance;
+
+    //death wish
+    private Vector2 portal = new Vector2(0,0);
+    private Vector2 portalTo = new Vector2(0, 0);
 
     //constructor
     public Path(GeneratePath _generator, int _x, int _y, List<Vector2> _stack)
@@ -68,36 +73,36 @@ public class Path
             neighbours = new List<Vector2>();
         }
 
+        //if the cell is at a place it can't walk most likly in the beginning it will teleport to a random place until its not anymore
+        if (grid.cells[x, y].Use == false)
+        {
+            grid.cells[x, y].start = false;
+            this.x = Random.Range(0, grid.width);
+            this.y = Random.Range(0, grid.height);
+
+            if(grid.cells[x, y].Use == true)
+            {
+                grid.cells[x, y].start = true;
+                start = new Vector2(x, y);
+                MazeGenerator mg = MazeGenerator.getInstance();
+                mg.start = start;
+            }
+        }
+
 
         //testing if their are unvisited neighbours in the list
         //and if it issnt null it will randomly choose a neighbour
-        //Debug.Log(neighbours.Count);
         if (neighbours.Count != 0)
         {
             int random = Random.Range(0, neighbours.Count);
 
             cell = grid.cells[(int)neighbours[random].x, (int)neighbours[random].y];
 
-            //if there is another neighbour in the list there will be a chance it will mutate and make another path
-            if(Random.Range(0,100) >= 90)
-            {
-                for(int i = 0; i < neighbours.Count; i++)
-                {
-                    if (grid.cells[(int)neighbours[i].x, (int)neighbours[i].y] != cell)
-                    {
-                        Cell Mutate = grid.cells[(int)neighbours[i].x, (int)neighbours[i].y];
-                        Path path = new Path(generator, Mutate.y, Mutate.x, stack);
-                        Debug.Log(path);
-                        generator.AddPath(path);
-                    }
-                }
-            }
             walking(cell);
         }
         else
         {
             //if there are not possibilities here it will go back and try to do it again
-            //Debug.Log("no possible neighbour");
             if (walkBack())
             {
             }
@@ -115,9 +120,11 @@ public class Path
             //and removing the walls
             grid.cells[x, y].visited = true;
             stack.Add(new Vector2(x, y));
+            history.Add(new Vector2(x, y));
+
+            portal = history[Random.Range(0, history.Count)];
 
             removeWall(cell);
-            Debug.Log(index + "walking from:" + x + "," + y + " to:" + cell.x + "," +  cell.y);
 
             //setting the new positions 
             //and adding a checkmark so the code later will see ooh everything send back a mark so i can stop generating
@@ -126,16 +133,6 @@ public class Path
             
             cell.visited = true;
             grid.checkmarks++;
-
-            if (index == 0)
-            {
-                grid.stacks.Add(stack);
-                index = grid.stacks.Count -1;
-            }
-            else
-            {
-                grid.stacks[index] = stack;
-            }
         }
 
         //letting the class go back to an older pos
@@ -147,7 +144,6 @@ public class Path
             //otherwise it will just return and run again
             if(stack[length] != start)
             {
-               Debug.Log(index + "walkingback from:" + x + "," + y + " to:" + (int)stack[length].x + "," + (int)stack[length].y);
                 this.x = (int)stack[length].x;
                 this.y = (int)stack[length].y;
                 stack.RemoveAt(length);
@@ -156,11 +152,32 @@ public class Path
             }
             else
             {
+                //setting the purple portals from place to place
+                if(portalTo == new Vector2(0, 0))
+                {
+                    foreach(Cell cell in grid.cells)
+                    {
+                        if(cell.visited == false &&  cell.Use == true)
+                        {
+                            //setting portals
+                            portalTo = new Vector2(cell.x, cell.y);
+                            cell.IsPortal = true;
+                            cell.ConnectPoint = portal;
+
+                            grid.cells[(int)portal.x, (int)portal.y].IsPortal = true;
+                            grid.cells[(int)portal.x, (int)portal.y].ConnectPoint = new Vector2(cell.x, cell.y);
+
+                            Path path = new Path(generator, cell.x, cell.y, stack);
+                            generator.AddPath(path);
+                            break;
+                        }
+                    }
+                }
                 this.delete = true;
                 return true;
             }
         }
-
+        
         void removeWall(Cell cell)
         {
             //getting the axis that it has moved

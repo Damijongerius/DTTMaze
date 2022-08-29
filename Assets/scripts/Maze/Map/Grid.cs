@@ -16,6 +16,7 @@ public class Grid
     //in these stacks im going to save the last done moves
     public List<List<Vector2>> stacks = new List<List<Vector2>>();
     public int checkmarks = 1;
+    public int needed;
 
     public Grid(int _width, int _height) 
     {
@@ -45,6 +46,7 @@ public class Grid
             //running function in PerlinNoise
             PerlinNoise pn = new PerlinNoise(this);
             this.cells = pn.Randomize();
+            needed = width * height;
         }
     }
 

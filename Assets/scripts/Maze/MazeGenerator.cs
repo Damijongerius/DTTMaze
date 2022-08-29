@@ -43,11 +43,11 @@ public class MazeGenerator : MonoBehaviour
     }
 
     //generator starting everything to make the maze
-    public void Generator(int _width, int _height)
+    public void Generator(int _width, int _height, Type type)
     {
         end = new Vector2(_width -1,_height -1);
         grid = new Grid(_width, _height);
-        grid.init(start,end,Type.SQUARE);
+        grid.init(start,end, type);
         if (drawMaze == null)
         {
             InvokeRepeating("generateTerrain", 0.0001f, 0.0001f);
@@ -88,7 +88,10 @@ public class MazeGenerator : MonoBehaviour
     //this will make the maze visible by making a mesh out of it
     public void generateTerrain()
     {
-        ivJv = drawMaze.DrawTerrain((int)ivJv.x, (int)ivJv.y);
+        if (drawMaze != null)
+        {
+            ivJv = drawMaze.DrawTerrain((int)ivJv.x, (int)ivJv.y);
+        }
     }
 
     //maze generator instance to get acces to everything in here from other scripts

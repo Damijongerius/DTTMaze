@@ -47,7 +47,6 @@ public class quads
             case 4:
                 return west;
             default:
-                Debug.Log("fail");
                 return null;
         }
     }
